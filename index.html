@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AllMarket - Marketplace Botswana</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>AllMarket</h1>
+    <p>Buy, Sell & Advertise in Botswana — Perfume, Thrift, Cars & more. Premium for businesses P150/year. Individuals P30/year. Free first month for individuals.</p>
+    <nav>
+      <button onclick="showTab('market')">Marketplace</button>
+      <button onclick="showTab('post')">Post Ad</button>
+      <button onclick="showTab('jobs')">Jobs</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Marketplace -->
+    <section id="market" class="tab">
+      <h2>Listings</h2>
+      <div id="listings"></div>
+      <p id="no-listings">No listings yet — be the first to post!</p>
+    </section>
+
+    <!-- Post Ad -->
+    <section id="post" class="tab" style="display:none;">
+      <h2>Post an Ad</h2>
+      <form id="adForm">
+        <label>Title: <input type="text" id="adTitle" required></label>
+        <label>Description: <textarea id="adDesc" required></textarea></label>
+        <label>Category:
+          <select id="adCategory">
+            <option>Perfume</option>
+            <option>Thrift</option>
+            <option>Cars</option>
+            <option>Electronics</option>
+            <option>Services</option>
+          </select>
+        </label>
+        <label>Type:
+          <select id="adType">
+            <option value="individual">Individual</option>
+            <option value="business">Business</option>
+          </select>
+        </label>
+        <label>Price (P): <input type="number" id="adPrice"></label>
+        <label>WhatsApp: <input type="text" id="adWhats"></label>
+        <label><input type="checkbox" id="adPremium"> Upgrade to Premium</label>
+        <button type="submit">Post Listing</button>
+      </form>
+    </section>
+
+    <!-- Jobs -->
+    <section id="jobs" class="tab" style="display:none;">
+      <h2>Jobs / Workers</h2>
+      <form id="jobForm">
+        <label>Title: <input type="text" id="jobTitle" required></label>
+        <label>Description: <textarea id="jobDesc" required></textarea></label>
+        <label>WhatsApp: <input type="text" id="jobWhats"></label>
+        <button type="submit">Post Job</button>
+      </form>
+      <div id="jobListings"></div>
+      <p id="no-jobs">No jobs posted yet.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>AllMarket — Buy & Sell across Botswana • Advertise: Businesses P150/year, Individuals P30/year (first month free for individuals)</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

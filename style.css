@@ -1,0 +1,14 @@
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f8f8f8; }
+header { background:#4f46e5; color:white; padding:20px; text-align:center; }
+header nav button { margin:5px; padding:10px 15px; cursor:pointer; border:none; border-radius:5px; background:white; color:#4f46e5; font-weight:bold; }
+header nav button:hover { background:#ddd; }
+main { padding:20px; max-width:900px; margin:auto; }
+.tab { display:block; }
+form label { display:block; margin:10px 0; }
+form input, form textarea, form select { width:100%; padding:8px; margin-top:5px; border-radius:5px; border:1px solid #ccc; }
+form button { padding:10px 15px; border:none; background:#4f46e5; color:white; border-radius:5px; cursor:pointer; }
+form button:hover { background:#3730a3; }
+.listing, .job { border:1px solid #ccc; padding:10px; border-radius:5px; margin:10px 0; background:white; }
+.premium { border:2px solid gold; }
+a.whats { text-decoration:none; color:white; background:#25d366; padding:5px 10px; border-radius:5px; }
+footer { background:#eee; text-align:center; padding:10px; margin-top:20px; }
