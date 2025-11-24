@@ -8,6 +8,7 @@ function showTab(tab) {
 let listings = JSON.parse(localStorage.getItem('listings')) || [];
 let jobs = JSON.parse(localStorage.getItem('jobs')) || [];
 
+// Render marketplace listings
 function renderListings() {
   const container = document.getElementById('listings');
   container.innerHTML = '';
@@ -22,10 +23,14 @@ function renderListings() {
     div.className = 'listing'+(l.premium?' premium':'');
     div.innerHTML = `<strong>${l.title}</strong> (${l.category}, ${l.type})<br>${l.description}<br>Price: ${l.price? 'P'+l.price:'N/A'}<br>
       ${l.whatsapp? `<a class="whats" target="_blank" href="https://wa.me/${l.whatsapp.replace(/\D/g,'')}">Chat on WhatsApp</a>`:''}`;
+    if(l.image){
+      div.innerHTML += `<br><img src="${l.image}" alt="product image">`;
+    }
     container.appendChild(div);
   });
 }
 
+// Render job listings
 function renderJobs() {
   const container = document.getElementById('jobListings');
   container.innerHTML = '';
@@ -47,6 +52,9 @@ function renderJobs() {
 // Post Ad
 document.getElementById('adForm').addEventListener('submit', e=>{
   e.preventDefault();
+
+  const imageInput = document.getElementById('adImage');
+
   const newAd = {
     title: document.getElementById('adTitle').value,
     description: document.getElementById('adDesc').value,
@@ -55,13 +63,29 @@ document.getElementById('adForm').addEventListener('submit', e=>{
     price: document.getElementById('adPrice').value,
     whatsapp: document.getElementById('adWhats').value,
     premium: document.getElementById('adPremium').checked,
+    image: '',
     created: Date.now()
   };
-  listings.unshift(newAd);
-  localStorage.setItem('listings', JSON.stringify(listings));
-  renderListings();
-  document.getElementById('adForm').reset();
-  showTab('market');
+
+  // Handle image
+  if(imageInput.files[0]){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      newAd.image = e.target.result; // base64
+      listings.unshift(newAd);
+      localStorage.setItem('listings', JSON.stringify(listings));
+      renderListings();
+      document.getElementById('adForm').reset();
+      showTab('market');
+    }
+    reader.readAsDataURL(imageInput.files[0]);
+  } else {
+    listings.unshift(newAd);
+    localStorage.setItem('listings', JSON.stringify(listings));
+    renderListings();
+    document.getElementById('adForm').reset();
+    showTab('market');
+  }
 });
 
 // Post Job
