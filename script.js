@@ -1,107 +1,19 @@
-// Show tab
-function showTab(tab) {
-  document.querySelectorAll('.tab').forEach(s => s.style.display='none');
-  document.getElementById(tab).style.display='block';
-}
+/* app.js - AllMarket
+   Replace WHATSAPP_NUMBER with your digits only (example: 26771234567)
+   Place the three files (index.html, styles.css, app.js) in the same folder.
+*/
 
-// Load listings from localStorage
-let listings = JSON.parse(localStorage.getItem('listings')) || [];
-let jobs = JSON.parse(localStorage.getItem('jobs')) || [];
+const WHATSAPP_NUMBER = "REPLACE_WITH_YOUR_NUMBER"; // <-- change this to your number (digits only, e.g. 26771234567)
+const WHATSAPP_PREFILL = "Hi, I'm interested in a listing on AllMarket. Please share details.";
 
-// Render marketplace listings
-function renderListings() {
-  const container = document.getElementById('listings');
-  container.innerHTML = '';
-  if(listings.length === 0){
-    document.getElementById('no-listings').style.display='block';
-    return;
-  } else {
-    document.getElementById('no-listings').style.display='none';
-  }
-  listings.forEach(l => {
-    const div = document.createElement('div');
-    div.className = 'listing'+(l.premium?' premium':'');
-    div.innerHTML = `<strong>${l.title}</strong> (${l.category}, ${l.type})<br>${l.description}<br>Price: ${l.price? 'P'+l.price:'N/A'}<br>
-      ${l.whatsapp? `<a class="whats" target="_blank" href="https://wa.me/${l.whatsapp.replace(/\D/g,'')}">Chat on WhatsApp</a>`:''}`;
-    if(l.image){
-      div.innerHTML += `<br><img src="${l.image}" alt="product image">`;
-    }
-    container.appendChild(div);
-  });
-}
+/* Sample data (you can update or load from a backend later) */
+const marketplaceData = [
+  { id: 1, type: 'market', title: 'iPhone XR', price: 'P2,500', img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200&auto=format&fit=crop', desc: 'Good condition', location: 'Gaborone', phone: '26771234567' },
+  { id: 2, type: 'market', title: 'Fridge - 200L', price: 'P1,200', img: 'https://images.unsplash.com/photo-1580910051074-77e6b4c9a4a8?q=80&w=1200&auto=format&fit=crop', desc: 'Works well', location: 'Tlokweng', phone: '26776900123' },
+  { id: 3, type: 'market', title: 'Clothes Bundle', price: 'P350', img: 'https://images.unsplash.com/photo-1520975911481-9e7f1f6c9df1?q=80&w=1200&auto=format&fit=crop', desc: 'Mixed sizes', location: 'Gaborone', phone: '26778122334' },
+  { id: 4, type: 'market', title: 'Used Laptop', price: 'P3,100', img: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop', desc: '8GB RAM', location: 'Phakalane', phone: '26771233122' }
+];
 
-// Render job listings
-function renderJobs() {
-  const container = document.getElementById('jobListings');
-  container.innerHTML = '';
-  if(jobs.length === 0){
-    document.getElementById('no-jobs').style.display='block';
-    return;
-  } else {
-    document.getElementById('no-jobs').style.display='none';
-  }
-  jobs.forEach(j => {
-    const div = document.createElement('div');
-    div.className = 'job';
-    div.innerHTML = `<strong>${j.title}</strong><br>${j.description}<br>
-      ${j.whatsapp? `<a class="whats" target="_blank" href="https://wa.me/${j.whatsapp.replace(/\D/g,'')}">Contact on WhatsApp</a>`:''}`;
-    container.appendChild(div);
-  });
-}
-
-// Post Ad
-document.getElementById('adForm').addEventListener('submit', e=>{
-  e.preventDefault();
-
-  const imageInput = document.getElementById('adImage');
-
-  const newAd = {
-    title: document.getElementById('adTitle').value,
-    description: document.getElementById('adDesc').value,
-    category: document.getElementById('adCategory').value,
-    type: document.getElementById('adType').value,
-    price: document.getElementById('adPrice').value,
-    whatsapp: document.getElementById('adWhats').value,
-    premium: document.getElementById('adPremium').checked,
-    image: '',
-    created: Date.now()
-  };
-
-  // Handle image
-  if(imageInput.files[0]){
-    const reader = new FileReader();
-    reader.onload = function(e){
-      newAd.image = e.target.result; // base64
-      listings.unshift(newAd);
-      localStorage.setItem('listings', JSON.stringify(listings));
-      renderListings();
-      document.getElementById('adForm').reset();
-      showTab('market');
-    }
-    reader.readAsDataURL(imageInput.files[0]);
-  } else {
-    listings.unshift(newAd);
-    localStorage.setItem('listings', JSON.stringify(listings));
-    renderListings();
-    document.getElementById('adForm').reset();
-    showTab('market');
-  }
-});
-
-// Post Job
-document.getElementById('jobForm').addEventListener('submit', e=>{
-  e.preventDefault();
-  const newJob = {
-    title: document.getElementById('jobTitle').value,
-    description: document.getElementById('jobDesc').value,
-    whatsapp: document.getElementById('jobWhats').value,
-    created: Date.now()
-  };
-  jobs.unshift(newJob);
-  localStorage.setItem('jobs', JSON.stringify(jobs));
-  renderJobs();
-  document.getElementById('jobForm').reset();
-});
-
-renderListings();
-renderJobs();
+const realestateData = [
+  { id: 1, type: 'realestate', title: '2-Bed House', price: 'P4,500 / month', img: 'https://images.unsplash.com/photo-1560185127-6ed9a6f60f96?q=80&w=1200&auto=format&fit=crop', location: 'Gaborone', beds: 2, phone: '26771234567' },
+  { id: 2, type: 'realestate', title: 'Plot for Sale', price: 'P35,000', img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop', location: 'Molepolole', beds: 0, phone: '26776900011' }

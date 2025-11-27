@@ -1,78 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AllMarket - Marketplace Botswana</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AllMarket - Real Estate, Jobs & Marketplace</title>
+
+<style>
+:root{
+  --primary:#0b79d0;
+  --muted:#6b7280;
+  --card-bg:#fff;
+  --page-bg:#f4f6fb;
+  --radius:12px;
+  --gap:14px;
+  --container-max:1100px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+  background:var(--page-bg);color:#0f1724;line-height:1.35;
+}
+.wrap{max-width:var(--container-max);margin:0 auto;padding:0 16px;}
+
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(90deg,var(--primary),#2aa0f8);
+  color:white;padding:16px;border-bottom:1px solid rgba(255,255,255,0.2);
+  position:sticky;top:0;z-index:999;
+}
+
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;}
+.logo .badge{background:rgba(255,255,255,0.12);padding:8px;border-radius:10px;}
+
+.nav-bar{
+  display:flex;gap:20px;
+}
+.nav-bar a{
+  color:white;text-decoration:none;font-weight:600;padding:8px 12px;border-radius:8px;
+  transition:background 0.2s;
+}
+.nav-bar a:hover{
+  background:rgba(255,255,255,0.2);
+}
+
+/* Top search */
+.top-search{display:flex;gap:12px;margin:18px 0;align-items:center;}
+.search-box{flex:1;display:flex;align-items:center;background:white;padding:10px 12px;border-radius:12px;box-shadow:0 2px 6px rgba(15,23,36,0.06);}
+.search-box input{border:0;outline:0;font-size:15px;width:100%;}
+.search-btn{background:var(--primary);color:white;border:0;padding:10px 12px;border-radius:10px;cursor:pointer;}
+
+.section{margin:20px 0;}
+.section-title{font-weight:700;font-size:16px;}
+.section-sub{color:var(--muted);font-size:13px;margin-bottom:6px;}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:var(--gap);
+}
+.card{
+  background:white;border-radius:var(--radius);overflow:hidden;
+  box-shadow:0 6px 18px rgba(11,23,44,0.05);
+}
+.card img{width:100%;height:170px;object-fit:cover;display:block;}
+.card .body{padding:12px;}
+.price{color:var(--primary);font-weight:700;}
+.meta{color:var(--muted);font-size:13px;}
+.location-row{display:flex;gap:10px;margin-bottom:10px;}
+.location-row input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(11,23,44,0.06);}
+.job-row{display:flex;gap:10px;}
+.job-row img{width:86px;height:86px;object-fit:cover;border-radius:8px;}
+footer{margin:26px 0;text-align:center;color:var(--muted);font-size:13px;}
+</style>
+
+<script>
+// Posts Data
+const realEstatePosts = [
+  {title:"3-Bed House", price:"P750,000", location:"Gaborone", number:"26773333333", img:"https://picsum.photos/400/300?random=4"},
+  {title:"Farm Plot", price:"P1,200,000", location:"Molepolole", number:"26774444444", img:"https://picsum.photos/400/300?random=5"}
+];
+const jobsPosts = [
+  {title:"Shop Assistant", location:"Gaborone", number:"26775555555", img:"https://picsum.photos/200/200?random=6"},
+  {title:"Driver", location:"Tlokweng", number:"26776666666", img:"https://picsum.photos/200/200?random=7"}
+];
+const marketplacePosts = [
+  {title:"Used Shoes", price:"P350", location:"Gaborone", number:"26771234567", img:"https://picsum.photos/400/300?random=1"},
+  {title:"Smartphone", price:"P1,200", location:"Phakalane", number:"26771111111", img:"https://picsum.photos/400/300?random=2"},
+  {title:"Speaker", price:"P500", location:"Tlokweng", number:"26772222222", img:"https://picsum.photos/400/300?random=3"}
+];
+
+function renderPosts(){
+  const reContainer = document.getElementById("realestate-grid");
+  realEstatePosts.forEach(p=>{
+    const card=document.createElement("div");card.className="card";
+    card.innerHTML=`<img src="${p.img}"><div class="body"><div class="price">${p.price}</div><div class="meta">${p.title} • ${p.location}</div><button onclick="window.open('https://wa.me/${p.number}?text=Hello', '_blank')">Chat on WhatsApp</button></div>`;
+    reContainer.appendChild(card);
+  });
+  const jobsContainer = document.getElementById("job-grid");
+  jobsPosts.forEach(p=>{
+    const card=document.createElement("div");card.className="card";
+    card.innerHTML=`<div class="body"><div class="job-row"><img src="${p.img}" /><div><strong>${p.title}</strong><br><span class="meta">${p.location} • ${p.number}</span><br><button onclick="window.open('https://wa.me/${p.number}?text=Hello', '_blank')">Chat on WhatsApp</button></div></div></div>`;
+    jobsContainer.appendChild(card);
+  });
+  const mpContainer = document.getElementById("marketplace-grid");
+  marketplacePosts.forEach(p=>{
+    const card=document.createElement("div");card.className="card";
+    card.innerHTML=`<img src="${p.img}"><div class="body"><div class="price">${p.price}</div><div class="meta">${p.title} • ${p.location}</div><button onclick="window.open('https://wa.me/${p.number}?text=Hello', '_blank')">Chat on WhatsApp</button></div>`;
+    mpContainer.appendChild(card);
+  });
+}
+
+function smoothScrollTo(id){
+  document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+window.onload=renderPosts;
+</script>
 </head>
+
 <body>
+<div class="wrap">
   <header>
-    <h1>AllMarket</h1>
-    <p>Buy, Sell & Advertise in Botswana — Perfume, Thrift, Cars & more. Premium for businesses P150/year. Individuals P30/year. Free first month for individuals.</p>
-    <nav>
-      <button onclick="showTab('market')">Marketplace</button>
-      <button onclick="showTab('post')">Post Ad</button>
-      <button onclick="showTab('jobs')">Jobs</button>
-    </nav>
+    <div class="logo"><div class="badge">🛒</div>AllMarket</div>
+    <div class="nav-bar">
+      <a href="javascript:void(0)" onclick="smoothScrollTo('realestate')">Real Estate</a>
+      <a href="javascript:void(0)" onclick="smoothScrollTo('jobs')">Jobs</a>
+      <a href="javascript:void(0)" onclick="smoothScrollTo('marketplace')">Marketplace</a>
+    </div>
   </header>
 
-  <main>
-    <!-- Marketplace -->
-    <section id="market" class="tab">
-      <h2>Listings</h2>
-      <div id="listings"></div>
-      <p id="no-listings">No listings yet — be the first to post!</p>
-    </section>
+  <div class="top-search">
+    <div class="search-box"><input placeholder="Search..."></div>
+    <button class="search-btn">Search</button>
+  </div>
 
-    <!-- Post Ad -->
-    <section id="post" class="tab" style="display:none;">
-      <h2>Post an Ad</h2>
-      <form id="adForm">
-        <label>Title: <input type="text" id="adTitle" required></label>
-        <label>Description: <textarea id="adDesc" required></textarea></label>
-        <label>Category:
-          <select id="adCategory">
-            <option>Perfume</option>
-            <option>Thrift</option>
-            <option>Cars</option>
-            <option>Electronics</option>
-            <option>Services</option>
-          </select>
-        </label>
-        <label>Type:
-          <select id="adType">
-            <option value="individual">Individual</option>
-            <option value="business">Business</option>
-          </select>
-        </label>
-        <label>Price (P): <input type="number" id="adPrice"></label>
-        <label>WhatsApp: <input type="text" id="adWhats"></label>
-        <label>Image (optional): <input type="file" id="adImage"></label>
-        <p style="font-size:12px; color:gray;">Upload a photo of your product or service.</p>
-        <label><input type="checkbox" id="adPremium"> Upgrade to Premium</label>
-        <button type="submit">Post Listing</button>
-      </form>
-    </section>
+  <!-- Sections -->
+  <div class="section" id="realestate">
+    <div class="section-title">Real Estate</div>
+    <div class="section-sub">Find plots, houses & rentals</div>
+    <div class="location-row"><input placeholder="Search location..."><button class="search-btn">Search</button></div>
+    <div class="grid" id="realestate-grid"></div>
+  </div>
 
-    <!-- Jobs -->
-    <section id="jobs" class="tab" style="display:none;">
-      <h2>Jobs / Workers</h2>
-      <form id="jobForm">
-        <label>Title: <input type="text" id="jobTitle" required></label>
-        <label>Description: <textarea id="jobDesc" required></textarea></label>
-        <label>WhatsApp: <input type="text" id="jobWhats"></label>
-        <button type="submit">Post Job</button>
-      </form>
-      <div id="jobListings"></div>
-      <p id="no-jobs">No jobs posted yet.</p>
-    </section>
-  </main>
+  <div class="section" id="jobs">
+    <div class="section-title">Jobs</div>
+    <div class="section-sub">Available opportunities</div>
+    <div class="grid" id="job-grid"></div>
+  </div>
+
+  <div class="section" id="marketplace">
+    <div class="section-title">Marketplace</div>
+    <div class="section-sub">Top items for sale</div>
+    <div class="grid" id="marketplace-grid"></div>
+  </div>
 
   <footer>
-    <p>AllMarket — Buy & Sell across Botswana • Advertise: Businesses P150/year, Individuals P30/year (first month free for individuals)</p>
+    AllMarket © 2025 — Buy • Sell • Rent • Find Jobs
   </footer>
-
-  <script src="script.js"></script>
+</div>
 </body>
 </html>
