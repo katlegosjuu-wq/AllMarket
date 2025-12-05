@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tenders | Your Website</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<h1>Tenders Board</h1>
+
+<!-- Tender Form -->
+<div class="form-container">
+    <h2>Post a Tender</h2>
+    <form id="tenderForm">
+        <input type="text" id="title" placeholder="Tender Title" required>
+        <input type="text" id="company" placeholder="Company Name" required>
+        <input type="date" id="deadline" required>
+        <textarea id="description" placeholder="Tender Description" required></textarea>
+        <button type="submit">Post Tender</button>
+    </form>
+</div>
+
+<hr>
+
+<!-- Listing Display -->
+<h2>Available Tenders</h2>
+<div id="tenderList"></div>
+
+<script>
+    // Load tenders from localStorage
+    function loadTenders() {
+        let tenders = JSON.parse(localStorage.getItem("tenders")) || [];
+        let container = document.getElementById("tenderList");
+        container.innerHTML = "";
+
+        tenders.forEach((t, i) => {
+            container.innerHTML += `
+                <div class="tender-card">
+                    <h3>${t.title}</h3>
+                    <p><strong>Company:</strong> ${t.company}</p>
+                    <p><strong>Deadline:</strong> ${t.deadline}</p>
+                    <p>${t.description}</p>
+                </div>
+            `;
+        });
+    }
+
+    // Save tender on submit
+    document.getElementById("tenderForm").addEventListener("submit", function(e){
+        e.preventDefault();
+
+        let newTender = {
+            title: document.getElementById("title").value,
+            company: document.getElementById("company").value,
+            deadline: document.getElementById("deadline").value,
+            description: document.getElementById("description").value,
+        };
+
+        let tenders = JSON.parse(localStorage.getItem("tenders")) || [];
+        tenders.push(newTender);
+        localStorage.setItem("tenders", JSON.stringify(tenders));
+
+        this.reset();
+        loadTenders();
+    });
+
+    loadTenders();
+</script>
+
+</body>
+</html>
+<section aria-labelledby="availableHeading">
+  <h2 id="availableHeading">Available Tenders</h2>
+  <div id="tenderList" aria-live="polite"></div>
+  <div id="empty" class="no-items" style="display:none">No tenders yet. Be the first to post!</div>
+</section>
+<h2>Latest Tenders</h2>
+<iframe src="tenders.html" style="width:100%; height:600px; border:none;"></iframe>

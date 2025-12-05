@@ -1,161 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AllMarket - Real Estate, Jobs & Marketplace</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AllMarket Botswana</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
 
-<style>
-:root{
-  --primary:#0b79d0;
-  --muted:#6b7280;
-  --card-bg:#fff;
-  --page-bg:#f4f6fb;
-  --radius:12px;
-  --gap:14px;
-  --container-max:1100px;
-}
-*{box-sizing:border-box;}
-body{
-  margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
-  background:var(--page-bg);color:#0f1724;line-height:1.35;
-}
-.wrap{max-width:var(--container-max);margin:0 auto;padding:0 16px;}
+<header>
+  <h1>AllMarket Botswana</h1>
+  <nav>
+    <a href="#" onclick="filterCategory('all')">All</a>
+    <a href="#" onclick="filterCategory('real-estate')">Real Estate</a>
+    <a href="#" onclick="filterCategory('jobs')">Jobs</a>
+    <a href="#" onclick="filterCategory('marketplace')">Marketplace</a>
+    <a href="all-listings.html">All Listings</a>
+  </nav>
+</header>
 
-header{
-  display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(90deg,var(--primary),#2aa0f8);
-  color:white;padding:16px;border-bottom:1px solid rgba(255,255,255,0.2);
-  position:sticky;top:0;z-index:999;
-}
+<div class="container">
 
-.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;}
-.logo .badge{background:rgba(255,255,255,0.12);padding:8px;border-radius:10px;}
+  <div class="form-section">
+    <h2>Submit a Listing</h2>
+    <form id="listingForm">
 
-.nav-bar{
-  display:flex;gap:20px;
-}
-.nav-bar a{
-  color:white;text-decoration:none;font-weight:600;padding:8px 12px;border-radius:8px;
-  transition:background 0.2s;
-}
-.nav-bar a:hover{
-  background:rgba(255,255,255,0.2);
-}
+      <label>Your Name:</label>
+      <input type="text" id="name" required>
 
-/* Top search */
-.top-search{display:flex;gap:12px;margin:18px 0;align-items:center;}
-.search-box{flex:1;display:flex;align-items:center;background:white;padding:10px 12px;border-radius:12px;box-shadow:0 2px 6px rgba(15,23,36,0.06);}
-.search-box input{border:0;outline:0;font-size:15px;width:100%;}
-.search-btn{background:var(--primary);color:white;border:0;padding:10px 12px;border-radius:10px;cursor:pointer;}
+      <label>Item Name:</label>
+      <input type="text" id="item" required>
 
-.section{margin:20px 0;}
-.section-title{font-weight:700;font-size:16px;}
-.section-sub{color:var(--muted);font-size:13px;margin-bottom:6px;}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:var(--gap);
-}
-.card{
-  background:white;border-radius:var(--radius);overflow:hidden;
-  box-shadow:0 6px 18px rgba(11,23,44,0.05);
-}
-.card img{width:100%;height:170px;object-fit:cover;display:block;}
-.card .body{padding:12px;}
-.price{color:var(--primary);font-weight:700;}
-.meta{color:var(--muted);font-size:13px;}
-.location-row{display:flex;gap:10px;margin-bottom:10px;}
-.location-row input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(11,23,44,0.06);}
-.job-row{display:flex;gap:10px;}
-.job-row img{width:86px;height:86px;object-fit:cover;border-radius:8px;}
-footer{margin:26px 0;text-align:center;color:var(--muted);font-size:13px;}
-</style>
+      <label>Category:</label>
+      <select id="category" required>
+        <option value="real-estate">Real Estate</option>
+        <option value="jobs">Jobs</option>
+        <option value="marketplace">Marketplace</option>
+      </select>
+
+      <label>Price:</label>
+      <input type="text" id="price" required>
+
+      <label>Location:</label>
+      <input type="text" id="location" required>
+
+      <label>WhatsApp Number:</label>
+      <input type="tel" id="whatsapp" required>
+
+      <label>Description:</label>
+      <textarea id="description"></textarea>
+
+      <label>Upload Image:</label>
+      <input type="file" id="image" accept="image/*">
+
+      <button type="submit">Submit Listing</button>
+
+    </form>
+  </div>
+
+  <h2>Listings</h2>
+  <div id="listingsContainer"></div>
+
+</div>
 
 <script>
-// Posts Data
-const realEstatePosts = [
-  {title:"3-Bed House", price:"P750,000", location:"Gaborone", number:"26773333333", img:"https://picsum.photos/400/300?random=4"},
-  {title:"Farm Plot", price:"P1,200,000", location:"Molepolole", number:"26774444444", img:"https://picsum.photos/400/300?random=5"}
-];
-const jobsPosts = [
-  {title:"Shop Assistant", location:"Gaborone", number:"26775555555", img:"https://picsum.photos/200/200?random=6"},
-  {title:"Driver", location:"Tlokweng", number:"26776666666", img:"https://picsum.photos/200/200?random=7"}
-];
-const marketplacePosts = [
-  {title:"Used Shoes", price:"P350", location:"Gaborone", number:"26771234567", img:"https://picsum.photos/400/300?random=1"},
-  {title:"Smartphone", price:"P1,200", location:"Phakalane", number:"26771111111", img:"https://picsum.photos/400/300?random=2"},
-  {title:"Speaker", price:"P500", location:"Tlokweng", number:"26772222222", img:"https://picsum.photos/400/300?random=3"}
-];
+const form = document.getElementById('listingForm');
+const container = document.getElementById('listingsContainer');
 
-function renderPosts(){
-  const reContainer = document.getElementById("realestate-grid");
-  realEstatePosts.forEach(p=>{
-    const card=document.createElement("div");card.className="card";
-    card.innerHTML=`<img src="${p.img}"><div class="body"><div class="price">${p.price}</div><div class="meta">${p.title} • ${p.location}</div><button onclick="window.open('https://wa.me/${p.number}?text=Hello', '_blank')">Chat on WhatsApp</button></div>`;
-    reContainer.appendChild(card);
-  });
-  const jobsContainer = document.getElementById("job-grid");
-  jobsPosts.forEach(p=>{
-    const card=document.createElement("div");card.className="card";
-    card.innerHTML=`<div class="body"><div class="job-row"><img src="${p.img}" /><div><strong>${p.title}</strong><br><span class="meta">${p.location} • ${p.number}</span><br><button onclick="window.open('https://wa.me/${p.number}?text=Hello', '_blank')">Chat on WhatsApp</button></div></div></div>`;
-    jobsContainer.appendChild(card);
-  });
-  const mpContainer = document.getElementById("marketplace-grid");
-  marketplacePosts.forEach(p=>{
-    const card=document.createElement("div");card.className="card";
-    card.innerHTML=`<img src="${p.img}"><div class="body"><div class="price">${p.price}</div><div class="meta">${p.title} • ${p.location}</div><button onclick="window.open('https://wa.me/${p.number}?text=Hello', '_blank')">Chat on WhatsApp</button></div>`;
-    mpContainer.appendChild(card);
+function loadListings(filter = 'all') {
+  container.innerHTML = '';
+  const listings = JSON.parse(localStorage.getItem('listings')) || [];
+
+  listings.forEach(listing => {
+    if (filter !== 'all' && listing.category !== filter) return;
+
+    const card = document.createElement('div');
+    card.className = 'listing';
+    card.onclick = () => {
+      window.location.href = `listing.html?id=${listing.id}`;
+    };
+
+    card.innerHTML = `
+      <img src="${listing.image}">
+      <h3>${listing.item}</h3>
+      <p>${listing.price}</p>
+      <p>${listing.location}</p>
+      <p><b>${listing.category}</b></p>
+    `;
+
+    container.appendChild(card);
   });
 }
 
-function smoothScrollTo(id){
-  document.getElementById(id).scrollIntoView({behavior:"smooth"});
+form.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const reader = new FileReader();
+  reader.onload = function() {
+    const listings = JSON.parse(localStorage.getItem('listings')) || [];
+
+    const id = Date.now();
+
+    listings.push({
+      id,
+      name: document.getElementById('name').value,
+      item: document.getElementById('item').value,
+      category: document.getElementById('category').value,
+      price: document.getElementById('price').value,
+      location: document.getElementById('location').value,
+      whatsapp: document.getElementById('whatsapp').value,
+      description: document.getElementById('description').value,
+      image: reader.result
+    });
+
+    localStorage.setItem('listings', JSON.stringify(listings));
+    form.reset();
+    loadListings();
+  };
+
+  reader.readAsDataURL(document.getElementById('image').files[0]);
+});
+
+function filterCategory(cat) {
+  loadListings(cat);
 }
 
-window.onload=renderPosts;
+loadListings();
 </script>
-</head>
 
-<body>
-<div class="wrap">
-  <header>
-    <div class="logo"><div class="badge">🛒</div>AllMarket</div>
-    <div class="nav-bar">
-      <a href="javascript:void(0)" onclick="smoothScrollTo('realestate')">Real Estate</a>
-      <a href="javascript:void(0)" onclick="smoothScrollTo('jobs')">Jobs</a>
-      <a href="javascript:void(0)" onclick="smoothScrollTo('marketplace')">Marketplace</a>
-    </div>
-  </header>
-
-  <div class="top-search">
-    <div class="search-box"><input placeholder="Search..."></div>
-    <button class="search-btn">Search</button>
-  </div>
-
-  <!-- Sections -->
-  <div class="section" id="realestate">
-    <div class="section-title">Real Estate</div>
-    <div class="section-sub">Find plots, houses & rentals</div>
-    <div class="location-row"><input placeholder="Search location..."><button class="search-btn">Search</button></div>
-    <div class="grid" id="realestate-grid"></div>
-  </div>
-
-  <div class="section" id="jobs">
-    <div class="section-title">Jobs</div>
-    <div class="section-sub">Available opportunities</div>
-    <div class="grid" id="job-grid"></div>
-  </div>
-
-  <div class="section" id="marketplace">
-    <div class="section-title">Marketplace</div>
-    <div class="section-sub">Top items for sale</div>
-    <div class="grid" id="marketplace-grid"></div>
-  </div>
-
-  <footer>
-    AllMarket © 2025 — Buy • Sell • Rent • Find Jobs
-  </footer>
-</div>
 </body>
 </html>
+<header>
+    <div class="menu">
+        <a href="index.html">Home</a>
+        <a href="contact.html">Contact</a>
+    </div>
+</header>

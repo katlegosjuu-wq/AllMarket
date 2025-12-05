@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listing Details</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header>
+  <h1>Listing Details</h1>
+  <nav>
+    <a href="index.html">Home</a>
+  </nav>
+</header>
+
+<div class="container" id="detailsContainer"></div>
+
+<script>
+function loadDetails() {
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get("id"));
+
+  const listings = JSON.parse(localStorage.getItem("listings")) || [];
+  const listing = listings.find(l => l.id === id);
+
+  if (!listing) return;
+
+  const container = document.getElementById("detailsContainer");
+  container.innerHTML = `
+    <div class="listing">
+      <img src="${listing.image}">
+      <h2>${listing.item}</h2>
+      <p><b>Price:</b> ${listing.price}</p>
+      <p><b>Location:</b> ${listing.location}</p>
+      <p><b>Category:</b> ${listing.category}</p>
+      <p>${listing.description}</p>
+
+      <p>
+        <a href="https://wa.me/${listing.whatsapp}" class="btn" target="_blank">
+          WhatsApp Seller
+        </a>
+      </p>
+    </div>
+  `;
+}.listing img {
+  width: 100%;          /* Always fill the box width */
+  height: auto;         /* Auto height to avoid stretching */
+  max-height: 180px;    /* Prevents images from becoming too tall */
+  object-fit: cover;    /* Keeps image clean and cropped */
+  border-radius: 8px;
+}
+
+
+loadDetails();
+</script>
+
+</body>
+</html>
+<div class="listings-grid">
+  
+  <div class="listing">
+    <img src="example1.jpg">
+    <h3>Item Name</h3>
+    <p>P150</p>
+    <p>Location: Gaborone</p>
+  </div>
+
+  <div class="listing">
+    <img src="example2.jpg">
+    <h3>Item Name</h3>
+    <p>P250</p>
+    <p>Location: Tlokweng</p>
+  </div>
+
+  <!-- more items here -->
+
+</div>
+<div class="listing">
+  <img src="https://via.placeholder.com/300">
+  <h3>Samsung A12</h3>
+  <p>P850</p>
+  <p>Gaborone</p>
+
+  <a 
+    class="whatsapp-btn" 
+    href="https://wa.me/26777566613
+    target="_blank">
+    WhatsApp Seller
+  </a>
+</div>
